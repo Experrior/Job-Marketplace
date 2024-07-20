@@ -51,6 +51,7 @@ CREATE TABLE chat_messages (
 
 -- big question if we want to store them or just keep pdf files (for keeping files we would need some good security checks for malicious files)
 CREATE TABLE skills (
+    -- how do we want to generate them ?, allow option of adding new ones for recruiters
     skill_id SERIAL PRIMARY KEY,
     skill_name VARCHAR(50) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
