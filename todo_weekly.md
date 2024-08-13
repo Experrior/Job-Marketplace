@@ -13,7 +13,7 @@
 
 ----------------------------------
 ### Mateusz:
-- [ ] create backend spring with basic database objects
+- [ ] create backend spring boot container with basic database entities
 
 ###### Stretch goals:
 - [ ]
