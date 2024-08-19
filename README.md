@@ -27,5 +27,5 @@
 - [ ]
 
 ###### Stretch goals:
-- [ ]
+- [ ] setup ci/cd
 - [ ]
