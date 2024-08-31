@@ -1,0 +1,185 @@
+job_market_backend  | 2024-08-15T19:37:11.671Z  INFO 7 --- [backend] [           main] edu.pwr.backend.BackendApplicationKt     : Starting BackendApplicationKt v0.0.1-SNAPSHOT using Java 21 with PID 7 (/app/app.jar started by root in /app)
+job_market_backend  | 2024-08-15T19:37:11.678Z  INFO 7 --- [backend] [           main] edu.pwr.backend.BackendApplicationKt     : The following 1 profile is active: "prod"
+job_market_backend  | 2024-08-15T19:37:12.349Z  INFO 7 --- [backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+job_market_backend  | 2024-08-15T19:37:12.372Z  INFO 7 --- [backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14 ms. Found 0 JPA repository interfaces.
+job_market_backend  | 2024-08-15T19:37:12.932Z  INFO 7 --- [backend] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+job_market_backend  | 2024-08-15T19:37:12.982Z  INFO 7 --- [backend] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+job_market_backend  | 2024-08-15T19:37:13.009Z  INFO 7 --- [backend] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+job_market_backend  | 2024-08-15T19:37:13.316Z  INFO 7 --- [backend] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+job_market_backend  | 2024-08-15T19:37:13.342Z  INFO 7 --- [backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+job_market_backend  | 2024-08-15T19:37:13.660Z  INFO 7 --- [backend] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7c453c34
+job_market_backend  | 2024-08-15T19:37:13.661Z  INFO 7 --- [backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+job_market_backend  | 2024-08-15T19:37:13.692Z  WARN 7 --- [backend] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+job_market_backend  | 2024-08-15T19:37:14.479Z  INFO 7 --- [backend] [           main] o.h.m.i.EntityInstantiatorPojoStandard   : HHH000182: No default (no-argument) constructor for class: edu.pwr.backend.entities.UserSettings (class must be instantiated by Interceptor)
+job_market_backend  | 2024-08-15T19:37:14.508Z  INFO 7 --- [backend] [           main] o.h.m.i.EntityInstantiatorPojoStandard   : HHH000182: No default (no-argument) constructor for class: edu.pwr.backend.entities.Job (class must be instantiated by Interceptor)
+job_market_backend  | 2024-08-15T19:37:14.509Z  INFO 7 --- [backend] [           main] o.h.m.i.EntityInstantiatorPojoStandard   : HHH000182: No default (no-argument) constructor for class: edu.pwr.backend.entities.UserProfile (class must be instantiated by Interceptor)
+job_market_backend  | 2024-08-15T19:37:14.510Z  INFO 7 --- [backend] [           main] o.h.m.i.EntityInstantiatorPojoStandard   : HHH000182: No default (no-argument) constructor for class: edu.pwr.backend.entities.Experience (class must be instantiated by Interceptor)
+job_market_backend  | 2024-08-15T19:37:14.512Z  INFO 7 --- [backend] [           main] o.h.m.i.EntityInstantiatorPojoStandard   : HHH000182: No default (no-argument) constructor for class: edu.pwr.backend.entities.User (class must be instantiated by Interceptor)
+job_market_backend  | 2024-08-15T19:37:14.514Z  INFO 7 --- [backend] [           main] o.h.m.i.EntityInstantiatorPojoStandard   : HHH000182: No default (no-argument) constructor for class: edu.pwr.backend.entities.Skill (class must be instantiated by Interceptor)
+job_market_backend  | 2024-08-15T19:37:14.515Z  INFO 7 --- [backend] [           main] o.h.m.i.EntityInstantiatorPojoStandard   : HHH000182: No default (no-argument) constructor for class: edu.pwr.backend.entities.Education (class must be instantiated by Interceptor)
+job_market_backend  | 2024-08-15T19:37:14.517Z  INFO 7 --- [backend] [           main] o.h.m.i.EntityInstantiatorPojoStandard   : HHH000182: No default (no-argument) constructor for class: edu.pwr.backend.entities.Company (class must be instantiated by Interceptor)
+job_market_backend  | 2024-08-15T19:37:14.518Z  INFO 7 --- [backend] [           main] o.h.m.i.EntityInstantiatorPojoStandard   : HHH000182: No default (no-argument) constructor for class: edu.pwr.backend.entities.Application (class must be instantiated by Interceptor)
+job_market_backend  | 2024-08-15T19:37:14.696Z  INFO 7 --- [backend] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+job_market_backend  | Hibernate: 
+job_market_backend  |     create table applications (
+job_market_backend  |         application_id integer not null,
+job_market_backend  |         application_date timestamp(6) not null,
+job_market_backend  |         status varchar(255) not null,
+job_market_backend  |         job_id_job_id integer not null,
+job_market_backend  |         user_id integer,
+job_market_backend  |         primary key (application_id)
+job_market_backend  |     )
+job_market_backend  | Hibernate: 
+job_market_backend  |     create table companies (
+job_market_backend  |         company_id integer not null,
+job_market_backend  |         company_name varchar(255) not null,
+job_market_backend  |         created_at timestamp(6) not null,
+job_market_backend  |         description varchar(255) not null,
+job_market_backend  |         industry varchar(255) not null,
+job_market_backend  |         location varchar(255) not null,
+job_market_backend  |         updated_at timestamp(6) not null,
+job_market_backend  |         verified boolean not null,
+job_market_backend  |         primary key (company_id)
+job_market_backend  |     )
+job_market_backend  | Hibernate: 
+job_market_backend  |     create table educations (
+job_market_backend  |         education_id integer not null,
+job_market_backend  |         degree varchar(255) not null,
+job_market_backend  |         end_date timestamp(6) not null,
+job_market_backend  |         institution_name varchar(255) not null,
+job_market_backend  |         start_date timestamp(6) not null,
+job_market_backend  |         updated_at timestamp(6) not null,
+job_market_backend  |         profile_id integer,
+job_market_backend  |         primary key (education_id)
+job_market_backend  |     )
+job_market_backend  | Hibernate: 
+job_market_backend  |     create table experiences (
+job_market_backend  |         experience_id integer not null,
+job_market_backend  |         company_name varchar(255) not null,
+job_market_backend  |         end_date timestamp(6) not null,
+job_market_backend  |         role varchar(255) not null,
+job_market_backend  |         start_date timestamp(6) not null,
+job_market_backend  |         updated_at timestamp(6) not null,
+job_market_backend  |         profile_id integer,
+job_market_backend  |         primary key (experience_id)
+job_market_backend  |     )
+job_market_backend  | Hibernate: 
+job_market_backend  |     create table jobs (
+job_market_backend  |         job_id integer not null,
+job_market_backend  |         company_id varchar(255) not null,
+job_market_backend  |         created_at timestamp(6) not null,
+job_market_backend  |         job_description varchar(255) not null,
+job_market_backend  |         job_title varchar(255) not null,
+job_market_backend  |         location varchar(255) not null,
+job_market_backend  |         required_experience varchar(255) not null,
+job_market_backend  |         required_skills varchar(255) not null,
+job_market_backend  |         salary varchar(255),
+job_market_backend  |         primary key (job_id)
+job_market_backend  |     )
+job_market_backend  | Hibernate: 
+job_market_backend  |     create table skills (
+job_market_backend  |         skill_id integer not null,
+job_market_backend  |         proficency_level smallint not null check (proficency_level between 0 and 4),
+job_market_backend  |         skill_name varchar(255) not null,
+job_market_backend  |         updated_at timestamp(6) not null,
+job_market_backend  |         profile_id integer,
+job_market_backend  |         primary key (skill_id)
+job_market_backend  |     )
+job_market_backend  | Hibernate: 
+job_market_backend  |     create table user_profiles (
+job_market_backend  |         profile_id integer not null,
+job_market_backend  |         profile_picture_path varchar(255) not null,
+job_market_backend  |         resume_path varchar(255) not null,
+job_market_backend  |         updated_at timestamp(6) not null,
+job_market_backend  |         user_id integer,
+job_market_backend  |         primary key (profile_id)
+job_market_backend  |     )
+job_market_backend  | Hibernate: 
+job_market_backend  |     create table user_settings (
+job_market_backend  |         settings_id integer not null,
+job_market_backend  |         newsletter_notification boolean not null,
+job_market_backend  |         offers_notification boolean not null,
+job_market_backend  |         push_notification boolean not null,
+job_market_backend  |         recruiter_messages boolean not null,
+job_market_backend  |         updated_at timestamp(6) not null,
+job_market_backend  |         user_id integer,
+job_market_backend  |         primary key (settings_id)
+job_market_backend  |     )
+job_market_backend  | Hibernate: 
+job_market_backend  |     create table users (
+job_market_backend  |         user_id integer not null,
+job_market_backend  |         created_at timestamp(6) not null,
+job_market_backend  |         email varchar(255) not null,
+job_market_backend  |         email_verified boolean not null,
+job_market_backend  |         employee_verified boolean not null,
+job_market_backend  |         first_name varchar(255) not null,
+job_market_backend  |         is_blocked boolean not null,
+job_market_backend  |         last_name varchar(255) not null,
+job_market_backend  |         phone varchar(255),
+job_market_backend  |         role smallint not null check (role between 0 and 1),
+job_market_backend  |         company_id integer,
+job_market_backend  |         primary key (user_id)
+job_market_backend  |     )
+job_market_backend  | Hibernate: 
+job_market_backend  |     create sequence applications_seq start with 1 increment by 50
+job_market_backend  | Hibernate: 
+job_market_backend  |     create sequence companies_seq start with 1 increment by 50
+job_market_backend  | Hibernate: 
+job_market_backend  |     create sequence educations_seq start with 1 increment by 50
+job_market_backend  | Hibernate: 
+job_market_backend  |     create sequence experiences_seq start with 1 increment by 50
+job_market_backend  | Hibernate: 
+job_market_backend  |     create sequence jobs_seq start with 1 increment by 50
+job_market_backend  | Hibernate: 
+job_market_backend  |     create sequence skills_seq start with 1 increment by 50
+job_market_backend  | Hibernate: 
+job_market_backend  |     create sequence user_profiles_seq start with 1 increment by 50
+job_market_backend  | Hibernate: 
+job_market_backend  |     create sequence user_settings_seq start with 1 increment by 50
+job_market_backend  | Hibernate: 
+job_market_backend  |     create sequence users_seq start with 1 increment by 50
+job_market_backend  | Hibernate: 
+job_market_backend  |     alter table if exists applications 
+job_market_backend  |        add constraint FKgq28u9bmnoyrwv6936j0x0sj3 
+job_market_backend  |        foreign key (job_id_job_id) 
+job_market_backend  |        references jobs
+job_market_backend  | Hibernate: 
+job_market_backend  |     alter table if exists applications 
+job_market_backend  |        add constraint FKfsfqljedcla632u568jl5qf3w 
+job_market_backend  |        foreign key (user_id) 
+job_market_backend  |        references users
+job_market_backend  | Hibernate: 
+job_market_backend  |     alter table if exists educations 
+job_market_backend  |        add constraint FKyqgxojm2079hgthr8lvov7e1 
+job_market_backend  |        foreign key (profile_id) 
+job_market_backend  |        references user_profiles
+job_market_backend  | Hibernate: 
+job_market_backend  |     alter table if exists experiences 
+job_market_backend  |        add constraint FKav9wexors6ofdj9db8utxqt4t 
+job_market_backend  |        foreign key (profile_id) 
+job_market_backend  |        references user_profiles
+job_market_backend  | Hibernate: 
+job_market_backend  |     alter table if exists skills 
+job_market_backend  |        add constraint FKgjbn0cwt1hypv6pgwq09dblwn 
+job_market_backend  |        foreign key (profile_id) 
+job_market_backend  |        references user_profiles
+job_market_backend  | Hibernate: 
+job_market_backend  |     alter table if exists user_profiles 
+job_market_backend  |        add constraint FKjcad5nfve11khsnpwj1mv8frj 
+job_market_backend  |        foreign key (user_id) 
+job_market_backend  |        references users
+job_market_backend  | Hibernate: 
+job_market_backend  |     alter table if exists user_settings 
+job_market_backend  |        add constraint FK8v82nj88rmai0nyck19f873dw 
+job_market_backend  |        foreign key (user_id) 
+job_market_backend  |        references users
+job_market_backend  | Hibernate: 
+job_market_backend  |     alter table if exists users 
+job_market_backend  |        add constraint FKin8gn4o1hpiwe6qe4ey7ykwq7 
+job_market_backend  |        foreign key (company_id) 
+job_market_backend  |        references companies
+job_market_backend  | 2024-08-15T19:37:14.843Z  INFO 7 --- [backend] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+job_market_backend  | 2024-08-15T19:37:15.459Z  INFO 7 --- [backend] [           main] edu.pwr.backend.BackendApplicationKt     : Started BackendApplicationKt in 4.185 seconds (process running for 4.764)
+job_market_backend  | 2024-08-15T19:37:15.466Z  INFO 7 --- [backend] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+job_market_backend  | 2024-08-15T19:37:15.468Z  INFO 7 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+job_market_backend  | 2024-08-15T19:37:15.476Z  INFO 7 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

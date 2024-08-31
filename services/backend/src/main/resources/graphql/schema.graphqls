@@ -1,0 +1,29 @@
+
+# Define the Company type
+type Company {
+    companyId: ID!
+    companyName: String!
+    location: String!
+    industry: String!
+    description: String!
+    verified: Boolean!
+    createdAt: String!
+    updatedAt: String!
+}
+
+# Queries to retrieve data
+type Query {
+    # Get all companies
+    companies: [Company]
+
+    # Get company by ID
+    companyById(companyId: ID!): Company
+}
+
+# Mutations to modify data
+type Mutation {
+    # Create a new company
+    createCompany(companyName: String!, location: String!, industry: String!, description: String!): Company
+}
+
+
