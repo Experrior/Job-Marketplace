@@ -1,43 +1,68 @@
 package edu.pwr.backend.controllers
 
-
-import edu.pwr.backend.dto.CompanyDTO
-
+import edu.pwr.backend.entities.Company
 import edu.pwr.backend.services.CompanyService
+import org.springframework.graphql.data.method.annotation.Argument
+import org.springframework.graphql.data.method.annotation.MutationMapping
+import org.springframework.graphql.data.method.annotation.QueryMapping
+import org.springframework.stereotype.Controller
 
+@Controller
+class CompanyController(private val companyService: CompanyService) {
 
-
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-
-@RestController
-
-class CompanyController (private val companyService: CompanyService) {
-
-    @GetMapping("/company/{companyId}")
-    fun get( @PathVariable companyId: Int) : ResponseEntity<CompanyDTO> {
-        return ResponseEntity.ok(companyService.get(companyId))
+    // Query to get a company by its ID
+    @QueryMapping
+    fun companyById(@Argument companyId: Int): Company? {
+        return companyService.getCompanyById(companyId)
     }
 
-    @PostMapping("/company/update")
-    fun update( @RequestBody companyDTO: CompanyDTO) : ResponseEntity<CompanyDTO> {
-        return ResponseEntity.ok(companyService.update(companyDTO))
+    // Query to get all companies
+    @QueryMapping
+    fun allCompanies(): List<Company> {
+        return companyService.getAllCompanies()
     }
 
-    @DeleteMapping("/company/{companyId}")
-    fun delete( @PathVariable companyId: Int) : ResponseEntity<Unit> {
-        return if (companyService.delete(companyId)) {
-            ResponseEntity.ok().build()
-        } else {
-            ResponseEntity.notFound().build()
-        }
+    // Mutation to create a new company
+    @MutationMapping
+    fun createCompany(
+        @Argument companyName: String,
+        @Argument location: String,
+        @Argument industry: String,
+        @Argument description: String,
+    ): Company {
+        val newCompany = Company(
+            companyName = companyName,
+            location = location,
+            industry = industry,
+            description = description,
+        )
+        return companyService.createCompany(newCompany)
     }
 
-    
-    @GetMapping("/user/component/{companyName}")
-    fun findAllByCompanyName( @PathVariable companyName: String) : ResponseEntity<List<CompanyDTO>> {
-        return ResponseEntity.ok(companyService.findAllByCompanyName(companyName))
+    // Mutation to update a company
+    @MutationMapping
+    fun updateCompany(
+        @Argument companyId: Int,
+        @Argument companyName: String,
+        @Argument location: String,
+        @Argument industry: String,
+        @Argument description: String,
+        @Argument verified: Boolean
+    ): Company? {
+        val updatedCompany = Company(
+            companyId = companyId,
+            companyName = companyName,
+            location = location,
+            industry = industry,
+            description = description,
+            verified = verified,
+        )
+        return companyService.updateCompany(companyId, updatedCompany)
     }
 
-
+    // Mutation to delete a company by its ID
+    @MutationMapping
+    fun deleteCompany(@Argument companyId: Int): Boolean {
+        return companyService.deleteCompany(companyId)
+    }
 }

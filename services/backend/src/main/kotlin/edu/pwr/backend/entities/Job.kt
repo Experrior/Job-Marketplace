@@ -1,12 +1,12 @@
 package edu.pwr.backend.entities
 
-import edu.pwr.backend.dto.ApplicationDTO
-import edu.pwr.backend.dto.JobDTO
+
+
 import jakarta.persistence.*
 import java.sql.Timestamp
 import java.time.Instant
 
-@Entity(name = "jobs")
+@Entity
 class Job(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,18 +35,5 @@ class Job(
         createdAt = currentTimestamp
     }
 
-    fun toDTO(): JobDTO {
-        return JobDTO(
-            jobId = this.jobId,
-            companyId = this.companyId,
-            jobTitle = this.jobTitle,
-            jobDescription = this.jobDescription,
-            requiredSkills = this.requiredSkills,
-            requiredExperience = this.requiredExperience,
-            location = this.location,
-            salary = this.salary,
-            createdAt = this.createdAt
-        )
-    }
 
 }

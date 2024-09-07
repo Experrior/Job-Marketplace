@@ -1,37 +1,55 @@
 package edu.pwr.backend.controllers
 
-
-import edu.pwr.backend.dto.UserDTO
-import edu.pwr.backend.dto.CompanyDTO
+import edu.pwr.backend.entities.User
 import edu.pwr.backend.services.UserService
-import edu.pwr.backend.services.CompanyService
+import org.springframework.graphql.data.method.annotation.Argument
+import org.springframework.graphql.data.method.annotation.MutationMapping
+import org.springframework.graphql.data.method.annotation.QueryMapping
+import org.springframework.stereotype.Controller
 
+@Controller
+class UserController(private val userService: UserService) {
 
-
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-
-@RestController
-
-class UserController (val userService: UserService) {
-
-    @GetMapping("/user/{userId}")
-    fun get( @PathVariable userId: Int) : ResponseEntity<UserDTO> {
-        return ResponseEntity.ok(userService.get(userId))
+    @QueryMapping
+    fun userById(@Argument userId: Int): User? {
+        return userService.getUserById(userId)
     }
 
-    @PostMapping("/user/update")
-    fun update( @RequestBody userDTO: UserDTO) : ResponseEntity<UserDTO> {
-        return ResponseEntity.ok(userService.update(userDTO))
+    @QueryMapping
+    fun allUsers(@Argument limit: Int?, @Argument offset: Int?): List<User> {
+        return userService.getAllUsers(limit ?: 10, offset ?: 0)
     }
 
-    @DeleteMapping("/user/{userId}")
-    fun delete( @PathVariable userId: Int) : ResponseEntity<Unit> {
-        return if (userService.delete(userId)) {
-            ResponseEntity.ok().build()
-        } else {
-            ResponseEntity.notFound().build()
-        }
+    @MutationMapping
+    fun createUser(
+        @Argument email: String,
+        @Argument firstName: String,
+        @Argument lastName: String,
+        @Argument passwordHash: String,
+        @Argument phone: String? = null,
+        @Argument role: String? = null,
+
+    ): User {
+        return userService.createUser(email, firstName, lastName, phone, role, passwordHash)
     }
 
+    @MutationMapping
+    fun updateUser(
+        @Argument userId: Int,
+        @Argument email: String? = null,
+        @Argument firstName: String? = null,
+        @Argument lastName: String? = null,
+        @Argument phone: String? = null,
+        @Argument role: String? = null,
+        @Argument isBlocked: Boolean? = null,
+        @Argument emailVerified: Boolean? = null,
+        @Argument employeeVerified: Boolean? = null
+    ): User? {
+        return userService.updateUser(userId, email, firstName, lastName, phone, role, isBlocked, emailVerified, employeeVerified)
+    }
+
+    @MutationMapping
+    fun deleteUser(@Argument userId: Int): Boolean {
+        return userService.deleteUser(userId)
+    }
 }

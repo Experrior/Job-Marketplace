@@ -1,11 +1,12 @@
 package edu.pwr.backend.entities
 
-import edu.pwr.backend.dto.ApplicationDTO
 import jakarta.persistence.*
 import java.sql.Timestamp
 import java.time.Instant
 import lombok.AllArgsConstructor
 import lombok.NoArgsConstructor
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,9 +20,12 @@ class Application(
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     var userId: User = User(),
 
-    @ManyToOne
-    @JoinColumn(name = "jobId", referencedColumnName = "jobId")
-    var jobId: Job = Job(),
+    @ManyToOne(cascade = [(CascadeType.ALL)])
+    @JoinColumn(name = "job_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    var job: Job = Job(),
+
+
     @Column(nullable = false)
     var status: String = "",
     @Column(nullable = false)
@@ -34,13 +38,4 @@ class Application(
         applicationDate = currentTimestamp
     }
 
-    fun toDTO(): ApplicationDTO {
-        return ApplicationDTO(
-            applicationId = this.applicationId,
-            userId = this.userId,
-            jobId = this.jobId,
-            status = this.status,
-            applicationDate = this.applicationDate,
-        )
-    }
 }

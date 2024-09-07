@@ -1,7 +1,5 @@
 package edu.pwr.backend.entities
 
-import edu.pwr.backend.dto.SkillDTO
-import edu.pwr.backend.enums.EProficiency
 import jakarta.persistence.*
 import java.sql.Timestamp
 import java.time.Instant
@@ -21,7 +19,7 @@ class Skill(
     var skillName: String = "",
 
     @Column(nullable = false)
-    var proficencyLevel: EProficiency = EProficiency.INTERMEDIATE,
+    var proficiencyLevel: String = "Intermediate",
 
     @Column(nullable = false)
     var updatedAt: Timestamp = Timestamp(0),
@@ -31,16 +29,6 @@ class Skill(
     fun onUpdate() {
         val currentTimestamp = Timestamp.from(Instant.now())
         updatedAt = currentTimestamp
-    }
-
-    fun toDTO(): SkillDTO {
-        return SkillDTO(
-            skillId = this.skillId,
-            profileId = this.profileId,
-            skillName = this.skillName,
-            proficencyLevel = this.proficencyLevel,
-            updatedAt = this.updatedAt
-        )
     }
 
 }

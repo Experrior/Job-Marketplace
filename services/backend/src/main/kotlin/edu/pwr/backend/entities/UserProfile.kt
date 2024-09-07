@@ -1,6 +1,6 @@
 package edu.pwr.backend.entities
 
-import edu.pwr.backend.dto.UserProfileDTO
+
 import jakarta.persistence.*
 import java.sql.Timestamp
 import java.time.Instant
@@ -32,13 +32,5 @@ class UserProfile(
         updatedAt = currentTimestamp
     }
 
-    fun toDTO(): UserProfileDTO {
-        return UserProfileDTO(
-            profileId = this.profileId,
-            userId = this.userId,
-            resumePath = this.resumePath,
-            profilePicturePath = this.profilePicturePath,
-            updatedAt = this.updatedAt
-        )
-    }
+
 }

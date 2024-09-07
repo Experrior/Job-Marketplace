@@ -1,11 +1,11 @@
 package edu.pwr.backend.entities
 
-import edu.pwr.backend.dto.CompanyDTO
+
 import jakarta.persistence.*
 import java.sql.Timestamp
 import java.time.Instant
 
-@Entity(name = "companies")
+@Entity
 class Company(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,18 +26,6 @@ class Company(
     var updatedAt: Timestamp = Timestamp.from(Instant.now()),
 ) {
 
-    fun toDTO(): CompanyDTO {
-        return CompanyDTO(
-            companyId = this.companyId,
-            companyName = this.companyName,
-            location = this.location,
-            industry = this.industry,
-            description = this.description,
-            verified = this.verified,
-            createdAt = this.createdAt,
-            updatedAt = this.updatedAt
-        )
-    }
 
     @PrePersist
     fun onCreate() {

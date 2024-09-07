@@ -1,8 +1,8 @@
 package edu.pwr.backend.entities
 
-import edu.pwr.backend.dto.ApplicationDTO
-import edu.pwr.backend.dto.ChatDTO
-import edu.pwr.backend.dto.UserSettingsDTO
+
+
+
 import jakarta.persistence.*
 import java.sql.Timestamp
 import java.time.Instant
@@ -55,18 +55,5 @@ class Chat(
         updatedAt = currentTimestamp
     }
 
-    fun toDTO(): ChatDTO {
-        return ChatDTO(
-            chatId = this.chatId,
-            name = this.name,
-            members = this.members,
-            createdBy = this.createdBy,
-            deletedBy = this.deletedBy,
-            lastMessage = this.lastMessage,
-            tags = this.tags,
-            createdAt = this.createdAt,
-            updatedAt = this.updatedAt
-        )
-    }
 
 }

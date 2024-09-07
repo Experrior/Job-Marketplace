@@ -1,37 +1,56 @@
 package edu.pwr.backend.controllers
 
-
-import edu.pwr.backend.dto.JobDTO
-import edu.pwr.backend.dto.CompanyDTO
+import edu.pwr.backend.entities.Job
 import edu.pwr.backend.services.JobService
-import edu.pwr.backend.services.CompanyService
+import org.springframework.graphql.data.method.annotation.Argument
+import org.springframework.graphql.data.method.annotation.MutationMapping
+import org.springframework.graphql.data.method.annotation.QueryMapping
+import org.springframework.stereotype.Controller
 
+@Controller
+class JobController(private val jobService: JobService) {
 
-
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-
-@RestController
-
-class JobController (val jobService: JobService) {
-
-    @GetMapping("/job/{jobId}")
-    fun get( @PathVariable jobId: Int) : ResponseEntity<JobDTO> {
-        return ResponseEntity.ok(jobService.get(jobId))
+    @QueryMapping
+    fun jobById(@Argument jobId: Int): Job? {
+        return jobService.getJobById(jobId)
     }
 
-    @PostMapping("/job/update")
-    fun update( @RequestBody jobDTO: JobDTO) : ResponseEntity<JobDTO> {
-        return ResponseEntity.ok(jobService.update(jobDTO))
+    @QueryMapping
+    fun allJobs(@Argument limit: Int? = 10, @Argument offset: Int? = 0): List<Job> {
+        return jobService.getAllJobs(limit ?: 10, offset ?: 0)
     }
 
-    @DeleteMapping("/job/{jobId}")
-    fun delete( @PathVariable jobId: Int) : ResponseEntity<Unit> {
-        return if (jobService.delete(jobId)) {
-            ResponseEntity.ok().build()
-        } else {
-            ResponseEntity.notFound().build()
-        }
+    @MutationMapping
+    fun createJob(
+        @Argument companyId: Int,
+        @Argument jobTitle: String,
+        @Argument jobDescription: String,
+        @Argument requiredSkills: String,
+        @Argument requiredExperience: String,
+        @Argument location: String,
+        @Argument salary: String? = null
+    ): Job {
+        return jobService.createJob(
+            companyId, jobTitle, jobDescription, requiredSkills, requiredExperience, location, salary
+        )
     }
 
+    @MutationMapping
+    fun updateJob(
+        @Argument jobId: Int,
+        @Argument companyId: Int? = null,
+        @Argument jobTitle: String? = null,
+        @Argument jobDescription: String? = null,
+        @Argument requiredSkills: String? = null,
+        @Argument requiredExperience: String? = null,
+        @Argument location: String? = null,
+        @Argument salary: String? = null
+    ): Job? {
+        return jobService.updateJob(jobId, companyId, jobTitle, jobDescription, requiredSkills, requiredExperience, location, salary)
+    }
+
+    @MutationMapping
+    fun deleteJob(@Argument jobId: Int): Boolean {
+        return jobService.deleteJob(jobId)
+    }
 }

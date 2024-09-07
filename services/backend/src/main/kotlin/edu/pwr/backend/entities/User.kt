@@ -1,19 +1,23 @@
 package edu.pwr.backend.entities
 
-import edu.pwr.backend.dto.UserDTO
-import edu.pwr.backend.enums.ERole
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import java.sql.Timestamp
 import java.time.Instant
 
-@Entity(name = "users")
+
+@Entity(name = "app_users")
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var userId: Int? = null,
-    @ManyToOne
-    @JoinColumn(name = "companyId", referencedColumnName = "companyId")
-    var companyId: Company? = null,
+
+    @ManyToOne(cascade = [(CascadeType.ALL)])
+    @JoinColumn(name = "company_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    var company: Company = Company(),
+
     @Column(nullable = false)
     var email: String = "",
     @Column(nullable = false)
@@ -22,8 +26,8 @@ class User(
     var lastName: String = "",
     @Column(nullable = true)
     var phone: String = "",
-    @Column(nullable = false, columnDefinition = "role::smallint")
-    var role: ERole = ERole.APPLICANT,
+    @Column(nullable = false)
+    var role: String = "applicant",
     @Column(nullable = false)
     var isBlocked: Boolean = false,
     @Column(nullable = false)
@@ -32,6 +36,8 @@ class User(
     var employeeVerified: Boolean = false,
     @Column(nullable = false)
     var createdAt: Timestamp = Timestamp(0),
+    @Column(nullable = false)
+    var passwordHash: String = "",
 
     ) {
 
@@ -41,19 +47,5 @@ class User(
         createdAt = currentTimestamp
     }
 
-    fun toDTO(): UserDTO {
-        return UserDTO(
-            userId = this.userId,
-            companyId = this.companyId,
-            email = this.email,
-            firstName = this.firstName,
-            lastName = this.lastName,
-            phone = this.phone,
-            role = this.role,
-            isBlocked = this.isBlocked,
-            emailVerified = this.emailVerified,
-            employeeVerified = this.employeeVerified,
-            createdAt = this.createdAt
-        )
-    }
+
 }

@@ -1,6 +1,6 @@
 package edu.pwr.backend.entities
 
-import edu.pwr.backend.dto.UserSettingsDTO
+
 import jakarta.persistence.*
 import java.sql.Timestamp
 import java.time.Instant
@@ -38,15 +38,5 @@ class UserSettings(
     }
 
     // Convert UserSettings entity to UserSettingsDTO
-    fun toDTO(): UserSettingsDTO {
-        return UserSettingsDTO(
-            settingsId = this.settingsId,
-            userId = this.userId,
-            offersNotification = this.offersNotification,
-            newsletterNotification = this.newsletterNotification,
-            recruiterMessages = this.recruiterMessages,
-            pushNotification = this.pushNotification,
-            updatedAt = this.updatedAt
-        )
-    }
+
 }

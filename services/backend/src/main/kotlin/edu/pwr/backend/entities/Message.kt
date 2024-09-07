@@ -1,10 +1,12 @@
 package edu.pwr.backend.entities
 
-import edu.pwr.backend.dto.MessageDTO
+
 import jakarta.persistence.*
+import lombok.Data
 import java.sql.Timestamp
 import java.time.Instant
 
+@Data
 @Entity(name = "chat_messages")
 class Message(
     @Id
@@ -50,17 +52,6 @@ class Message(
         updatedAt = currentTimestamp
     }
 
-    fun toDTO(): MessageDTO {
-        return MessageDTO(
-            messageId = this.messageId,
-            chatId = this.chatId,
-            content = this.content,
-            createdBy = this.createdBy,
-            readBy = this.readBy,
-            deletedBy = this.deletedBy,
-            createdAt = this.createdAt,
-            updatedAt = this.updatedAt
-        )
-    }
+
     
 }

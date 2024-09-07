@@ -1,41 +1,49 @@
-package edu.pwr.backend.services;
+package edu.pwr.backend.services
 
+import edu.pwr.backend.entities.Company
 
-import edu.pwr.backend.dto.CompanyDTO
 import edu.pwr.backend.repositories.CompanyRepository
-import jakarta.persistence.EntityNotFoundException
-import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
-open class CompanyService(
-    private val companyRepository: CompanyRepository
-) {
+class CompanyService(private val companyRepository: CompanyRepository) {
 
-    fun get(companyId: Int): CompanyDTO {
-        return companyRepository.getReferenceById(companyId).toDTO();
+    fun createCompany(company: Company): Company {
+        return companyRepository.save(company)
     }
 
-    @Transactional
-    open fun update(companyDTO: CompanyDTO): CompanyDTO {
-        val toSave = companyDTO.toEntity()
-        return companyRepository.save(toSave).toDTO()
+    fun getCompanyById(companyId: Int): Company? {
+        return companyRepository.findById(companyId).get()
     }
-    @Transactional
-    open fun delete(companyId: Int): Boolean {
-        try {
-            val company = companyRepository.getReferenceById(companyId);
-            companyRepository.delete(company);
-        }catch (e: EntityNotFoundException) {
-            return false
+
+    fun getAllCompanies(): List<Company> {
+        return companyRepository.findAll()
+    }
+
+    fun updateCompany(companyId: Int, updatedCompany: Company): Company? {
+        val existingCompany = companyRepository.findById(companyId).orElse(null)
+
+        return if (existingCompany != null) {
+            existingCompany.apply {
+                companyName = updatedCompany.companyName
+                location = updatedCompany.location
+                industry = updatedCompany.industry
+                description = updatedCompany.description
+                verified = updatedCompany.verified
+                updatedAt = updatedCompany.updatedAt
+            }
+            companyRepository.save(existingCompany)
+        } else {
+            null  // Return null if the company with the given ID doesn't exist
         }
-        return true
     }
 
-
-    fun findAllByCompanyName(companyName: String): List<CompanyDTO> {
-        var matchingCompanies = companyRepository.findByCompanyNameContaining(companyName);
-        return matchingCompanies.map { it.toDTO() }
+    fun deleteCompany(companyId: Int): Boolean {
+        val company = companyRepository.findById(companyId).orElse(null)
+        return if (company != null) {
+            companyRepository.delete(company)
+            true
+        } else
+            false
     }
-
 }

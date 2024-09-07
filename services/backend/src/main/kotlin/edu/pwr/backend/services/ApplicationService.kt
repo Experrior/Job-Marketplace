@@ -1,56 +1,56 @@
-package edu.pwr.backend.services;
+package edu.pwr.backend.services
 
-
-import edu.pwr.backend.dto.ApplicationCreationDTO
-import edu.pwr.backend.dto.ApplicationDTO
 import edu.pwr.backend.entities.Application
 import edu.pwr.backend.repositories.ApplicationRepository
 import edu.pwr.backend.repositories.JobRepository
 import edu.pwr.backend.repositories.UserRepository
-import jakarta.persistence.EntityNotFoundException
-import jakarta.transaction.Transactional
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import java.sql.Timestamp
+import java.time.Instant
 
 @Service
-open class ApplicationService(
+class ApplicationService(
     private val applicationRepository: ApplicationRepository,
     private val userRepository: UserRepository,
     private val jobRepository: JobRepository
 ) {
-    fun get(applicationId: Int): Application {
-        return applicationRepository.getReferenceById(applicationId)
+
+    fun getApplicationById(applicationId: Int): Application? {
+        return applicationRepository.findById(applicationId).orElse(null)
     }
 
-    @Transactional
-    open fun update(applicationCreationDTO: ApplicationCreationDTO): ApplicationDTO {
-        val user = applicationCreationDTO.userId.let { userId ->
-            userRepository.findById(userId)
-                .orElseThrow { EntityNotFoundException("User with ID $userId not found") }
-        }
+    fun getAllApplications(limit: Int = 10, offset: Int = 0): List<Application> {
+        return applicationRepository.findAll(PageRequest.of(offset, limit)).content
+    }
 
-        val job = applicationCreationDTO.jobId.let { jobId ->
-            jobRepository.findById(jobId)
-                .orElseThrow { EntityNotFoundException("Job with ID $jobId not found") }
-        }
+    fun createApplication(
+        userId: Int,
+        jobId: Int,
+    ): Application? {
+        val user = userRepository.findById(userId).orElse(null) ?: return null
+        val job = jobRepository.findById(jobId).orElse(null) ?: return null
 
-        val application = Application(
+        val newApplication = Application(
             userId = user,
-            jobId = job,
+            job = job,
+            applicationDate = Timestamp.from(Instant.now())
         )
-
-        return applicationRepository.save(application).toDTO()
+        return applicationRepository.save(newApplication)
     }
-    @Transactional
-    open fun delete(applicationId: Int): Boolean {
-        try {
-            val application = applicationRepository.getReferenceById(applicationId);
-            applicationRepository.delete(application);
-        }catch (e: EntityNotFoundException) {
-            return false
-        }
+
+    fun updateApplication(
+        applicationId: Int,
+        status: String? = null
+    ): Application? {
+        val existingApplication = applicationRepository.findById(applicationId).orElse(null) ?: return null
+        status?.let { existingApplication.status = it }
+        return applicationRepository.save(existingApplication)
+    }
+
+    fun deleteApplication(applicationId: Int): Boolean {
+        val application = applicationRepository.findById(applicationId).orElse(null) ?: return false
+        applicationRepository.delete(application)
         return true
     }
-
-
-
 }

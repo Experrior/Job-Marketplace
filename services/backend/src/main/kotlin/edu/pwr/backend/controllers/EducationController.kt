@@ -1,37 +1,58 @@
 package edu.pwr.backend.controllers
 
-
-import edu.pwr.backend.dto.EducationDTO
-import edu.pwr.backend.dto.CompanyDTO
+import edu.pwr.backend.entities.Education
 import edu.pwr.backend.services.EducationService
-import edu.pwr.backend.services.CompanyService
+import org.springframework.graphql.data.method.annotation.Argument
+import org.springframework.graphql.data.method.annotation.MutationMapping
+import org.springframework.graphql.data.method.annotation.QueryMapping
+import org.springframework.stereotype.Controller
+import java.sql.Timestamp
 
+@Controller
+class EducationController(private val educationService: EducationService) {
 
-
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-
-@RestController
-
-class EducationController (val educationService: EducationService) {
-
-    @GetMapping("/education/{educationId}")
-    fun get( @PathVariable educationId: Int) : ResponseEntity<EducationDTO> {
-        return ResponseEntity.ok(educationService.get(educationId))
+    @QueryMapping
+    fun educationById(@Argument educationId: Int): Education? {
+        return educationService.getEducationById(educationId)
     }
 
-    @PostMapping("/education/update")
-    fun update( @RequestBody educationDTO: EducationDTO) : ResponseEntity<EducationDTO> {
-        return ResponseEntity.ok(educationService.update(educationDTO))
+    @QueryMapping
+    fun allEducations(
+        @Argument profileId: Int,
+        @Argument limit: Int? = 10,
+        @Argument offset: Int? = 0
+    ): List<Education> {
+        return educationService.getAllEducations(profileId, limit ?: 10, offset ?: 0)
     }
 
-    @DeleteMapping("/education/{educationId}")
-    fun delete( @PathVariable educationId: Int) : ResponseEntity<Unit> {
-        return if (educationService.delete(educationId)) {
-            ResponseEntity.ok().build()
-        } else {
-            ResponseEntity.notFound().build()
-        }
+    @MutationMapping
+    fun createEducation(
+        @Argument profileId: Int,
+        @Argument institutionName: String,
+        @Argument degree: String,
+        @Argument startDate: String,
+        @Argument endDate: String
+    ): Education? {
+        val startDateTimestamp = Timestamp.valueOf(startDate)
+        val endDateTimestamp = Timestamp.valueOf(endDate)
+        return educationService.createEducation(profileId, institutionName, degree, startDateTimestamp, endDateTimestamp)
     }
 
+    @MutationMapping
+    fun updateEducation(
+        @Argument educationId: Int,
+        @Argument institutionName: String? = null,
+        @Argument degree: String? = null,
+        @Argument startDate: String? = null,
+        @Argument endDate: String? = null
+    ): Education? {
+        val startDateTimestamp = startDate?.let { Timestamp.valueOf(it) }
+        val endDateTimestamp = endDate?.let { Timestamp.valueOf(it) }
+        return educationService.updateEducation(educationId, institutionName, degree, startDateTimestamp, endDateTimestamp)
+    }
+
+    @MutationMapping
+    fun deleteEducation(@Argument educationId: Int): Boolean {
+        return educationService.deleteEducation(educationId)
+    }
 }

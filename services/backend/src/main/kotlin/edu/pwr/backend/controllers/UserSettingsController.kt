@@ -1,37 +1,49 @@
 package edu.pwr.backend.controllers
 
-
-import edu.pwr.backend.dto.UserSettingsDTO
-import edu.pwr.backend.dto.CompanyDTO
+import edu.pwr.backend.entities.UserSettings
 import edu.pwr.backend.services.UserSettingsService
-import edu.pwr.backend.services.CompanyService
+import org.springframework.graphql.data.method.annotation.Argument
+import org.springframework.graphql.data.method.annotation.MutationMapping
+import org.springframework.graphql.data.method.annotation.QueryMapping
+import org.springframework.stereotype.Controller
 
+@Controller
+class UserSettingsController(private val userSettingsService: UserSettingsService) {
 
-
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-
-@RestController()
-
-class UserSettingsController (val userSettingsService: UserSettingsService) {
-
-    @GetMapping("/userSettings/{userSettingsId}")
-    fun get( @PathVariable userSettingsId: Int) : ResponseEntity<UserSettingsDTO> {
-        return ResponseEntity.ok(userSettingsService.get(userSettingsId))
+    @QueryMapping
+    fun userSettingsById(@Argument settingsId: Int): UserSettings? {
+        return userSettingsService.getUserSettingsById(settingsId)
     }
 
-    @PostMapping("/userSettings/update")
-    fun update( @RequestBody userSettingsDTO: UserSettingsDTO) : ResponseEntity<UserSettingsDTO> {
-        return ResponseEntity.ok(userSettingsService.update(userSettingsDTO))
+    @QueryMapping
+    fun allUserSettings(@Argument limit: Int? = 10, @Argument offset: Int? = 0): List<UserSettings> {
+        return userSettingsService.getAllUserSettings(limit ?: 10, offset ?: 0)
     }
 
-    @DeleteMapping("/userSettings/{userSettingsId}")
-    fun delete( @PathVariable userSettingsId: Int) : ResponseEntity<Unit> {
-        return if (userSettingsService.delete(userSettingsId)) {
-            ResponseEntity.ok().build()
-        } else {
-            ResponseEntity.notFound().build()
-        }
+    @MutationMapping
+    fun createUserSettings(
+        @Argument userId: Int,
+        @Argument offersNotification: Boolean,
+        @Argument newsletterNotification: Boolean,
+        @Argument recruiterMessages: Boolean,
+        @Argument pushNotification: Boolean
+    ): UserSettings? {
+        return userSettingsService.createUserSettings(userId, offersNotification, newsletterNotification, recruiterMessages, pushNotification)
     }
 
+    @MutationMapping
+    fun updateUserSettings(
+        @Argument settingsId: Int,
+        @Argument offersNotification: Boolean? = null,
+        @Argument newsletterNotification: Boolean? = null,
+        @Argument recruiterMessages: Boolean? = null,
+        @Argument pushNotification: Boolean? = null
+    ): UserSettings? {
+        return userSettingsService.updateUserSettings(settingsId, offersNotification, newsletterNotification, recruiterMessages, pushNotification)
+    }
+
+    @MutationMapping
+    fun deleteUserSettings(@Argument settingsId: Int): Boolean {
+        return userSettingsService.deleteUserSettings(settingsId)
+    }
 }

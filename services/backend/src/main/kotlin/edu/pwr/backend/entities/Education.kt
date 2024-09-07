@@ -1,6 +1,6 @@
 package edu.pwr.backend.entities
 
-import edu.pwr.backend.dto.EducationDTO
+
 import jakarta.persistence.*
 import java.sql.Timestamp
 import java.time.Instant
@@ -35,16 +35,5 @@ class Education(
         updatedAt = currentTimestamp
     }
 
-    fun toDTO(): EducationDTO {
-        return EducationDTO(
-            educationId = this.educationId,
-            profileId = this.profileId,  // Assuming UserProfile has a profileId field
-            institutionName = this.institutionName,
-            degree = this.degree,
-            startDate = this.startDate,
-            endDate = this.endDate,
-            updatedAt = this.updatedAt
-        )
-    }
 
 }

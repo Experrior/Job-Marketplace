@@ -1,6 +1,6 @@
 package edu.pwr.backend.entities
 
-import edu.pwr.backend.dto.ExperienceDTO
+
 import jakarta.persistence.*
 import java.sql.Timestamp
 import java.time.Instant
@@ -35,17 +35,6 @@ class Experience(
         updatedAt = currentTimestamp
     }
 
-    fun toDTO(): ExperienceDTO {
-        return ExperienceDTO(
-            experienceId = this.experienceId,
-            profileId = this.profileId,  // Assuming UserProfile has a profileId field
-            companyName = this.companyName,
-            role = this.role,
-            startDate = this.startDate,
-            endDate = this.endDate,
-            updatedAt = this.updatedAt
-        )
-    }
 
 
 }

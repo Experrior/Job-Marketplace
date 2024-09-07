@@ -1,37 +1,49 @@
 package edu.pwr.backend.controllers
 
-
-import edu.pwr.backend.dto.SkillDTO
-import edu.pwr.backend.dto.CompanyDTO
+import edu.pwr.backend.entities.Skill
 import edu.pwr.backend.services.SkillService
-import edu.pwr.backend.services.CompanyService
+import org.springframework.graphql.data.method.annotation.Argument
+import org.springframework.graphql.data.method.annotation.MutationMapping
+import org.springframework.graphql.data.method.annotation.QueryMapping
+import org.springframework.stereotype.Controller
 
+@Controller
+class SkillController(private val skillService: SkillService) {
 
-
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-
-@RestController
-
-class SkillController (val skillService: SkillService) {
-
-    @GetMapping("/skill/{skillId}")
-    fun get( @PathVariable skillId: Int) : ResponseEntity<SkillDTO> {
-        return ResponseEntity.ok(skillService.get(skillId))
+    @QueryMapping
+    fun skillById(@Argument skillId: Int): Skill? {
+        return skillService.getSkillById(skillId)
     }
 
-    @PostMapping("/skill/update")
-    fun update( @RequestBody skillDTO: SkillDTO) : ResponseEntity<SkillDTO> {
-        return ResponseEntity.ok(skillService.update(skillDTO))
+    @QueryMapping
+    fun allSkills(
+        @Argument profileId: Int,
+        @Argument limit: Int? = 10,
+        @Argument offset: Int? = 0
+    ): List<Skill> {
+        return skillService.getAllSkills(profileId, limit ?: 10, offset ?: 0)
     }
 
-    @DeleteMapping("/skill/{skillId}")
-    fun delete( @PathVariable skillId: Int) : ResponseEntity<Unit> {
-        return if (skillService.delete(skillId)) {
-            ResponseEntity.ok().build()
-        } else {
-            ResponseEntity.notFound().build()
-        }
+    @MutationMapping
+    fun createSkill(
+        @Argument profileId: Int,
+        @Argument skillName: String,
+        @Argument proficiencyLevel: String
+    ): Skill? {
+        return skillService.createSkill(profileId, skillName, proficiencyLevel)
     }
 
+    @MutationMapping
+    fun updateSkill(
+        @Argument skillId: Int,
+        @Argument skillName: String? = null,
+        @Argument proficiencyLevel: String? = null
+    ): Skill? {
+        return skillService.updateSkill(skillId, skillName, proficiencyLevel)
+    }
+
+    @MutationMapping
+    fun deleteSkill(@Argument skillId: Int): Boolean {
+        return skillService.deleteSkill(skillId)
+    }
 }
