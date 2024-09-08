@@ -5,16 +5,17 @@
 
 set -ex
 
-docker compose -f docker/compose.yaml down
+docker compose -f infra/compose.yaml down
+docker rm -fv job_market_db_local
 
 # Build images
 if [[ $# -ge 1 ]] ; then
-	docker build -f docker/Dockerfile_db . -t job_market_db
-	docker build -f docker/Dockerfile_backend . -t job_market_backend
+	docker build -f services/db/Dockerfile_db . -t job_market_db
+	docker build -f services/backend/Dockerfile_backend . -t job_market_backend
 fi
 
 # Run compose
-docker compose -f docker/compose.yaml up -d --remove-orphans
+docker compose -f infra/compose.yaml up -d --remove-orphans
 
 set +ex
-watch -n 1 docker compose -f docker/compose.yaml ps
+watch -n 1 docker compose -f infra/compose.yaml ps
