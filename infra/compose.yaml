@@ -1,0 +1,45 @@
+services:
+  job_market_db:
+    container_name: job_market_database
+    image: job_market_database
+    ports:  
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: JobMarketDB
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: test
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "admin", "-d", "JobMarketDB"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - inner_network
+
+  job_market_backend:
+    container_name: job_market_backend
+    image: job_market_backend 
+    ports:
+      - "8084:8084"
+    healthcheck:
+      test: "curl --fail --silent 172.22.0.1:8084/actuator/health | grep UP || echo 'fail'"
+      interval: 20s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      job_market_db:
+        condition: service_healthy
+    environment:
+      DATASOURCE_URL: jdbc:postgresql://172.22.0.1:5432/JobMarketDB
+      DATASOURCE_USERNAME: admin
+      DATASOURCE_PASSWORD: test
+    networks:
+      - inner_network
+
+networks:
+  inner_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16

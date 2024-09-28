@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphql-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: graphql
+  template:
+    metadata:
+      labels:
+        app: graphql
+    spec:
+      containers:
+        - name: graphql-container
+          image: job_market_backend:latest
+          ports:
+            - containerPort: 8084
+          env:
+            - name: JAVA_OPTS
+              value: "-Xms512m -Xmx1024m"
+            - name: DATASOURCE_URL
+              value: jdbc:postgresql://172.22.0.2:5432/JobMarketDB
+            - name: DATASOURCE_USERNAME
+              value: admin
+            - name: DATASOURCE_PASSWORD
+              value: test
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"  
+          imagePullPolicy: Never

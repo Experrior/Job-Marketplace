@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database-replica
+spec:
+  serviceName: 'postgres-slaves'
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database-replica
+  template:
+    metadata:
+      labels:
+        app: database-replica
+    spec:
+      containers:
+        - name: database-replica
+          image: job_market_database:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5432
+          command: ["/bin/bash", "/startup.sh"]
+          env:
+            - name: PGUSER
+              value: replicator
+            - name: PGPASSWORD
+              value: replicator_password
+            - name: POSTGRES_USER
+              value: admin
+            - name: POSTGRES_PASSWORD
+              value: test
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"  
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/postgresql/pg_hba.conf
+              subPath: pg_hba.conf
+            - name: config-volume
+              mountPath: /xd.conf
+              subPath: pg_hba.conf
+            - name: config-volume
+              mountPath: /etc/postgresql/postgresql.conf
+              subPath: postgresql-slave.conf
+            - name: config-volume
+              mountPath: /startup.sh
+              subPath: slave-startup.sh
+      volumes:
+        - name: config-volume
+          configMap:
+            name: postgres-slave

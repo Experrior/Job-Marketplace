@@ -1,0 +1,254 @@
+type Company {
+    companyId: ID!
+    companyName: String!
+    location: String!
+    industry: String!
+    description: String!
+    verified: Boolean!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type User {
+    userId: Int
+    passwordHash: String!
+    companyId: Company
+    email: String!
+    firstName: String!
+    lastName: String!
+    phone: String
+    role: String!
+    isBlocked: Boolean!
+    emailVerified: Boolean!
+    employeeVerified: Boolean!
+    createdAt: String!
+
+}
+
+type Job {
+    jobId: Int
+    companyId: Int
+    jobTitle: String
+    jobDescription: String
+    requiredSkills: String
+    requiredExperience: String
+    location: String
+    salary: String
+    createdAt: String
+}
+
+type Application {
+    applicationId: Int
+    userId: User
+    job: Job
+    status: String
+    applicationDate: String
+}
+
+type UserProfile {
+    profileId: Int
+    userId: User
+    resumePath: String
+    profilePicturePath: String
+    updatedAt: String
+}
+
+type UserSettings {
+    settingsId: Int
+    userId: User
+    offersNotification: Boolean
+    newsletterNotification: Boolean
+    recruiterMessages: Boolean
+    pushNotification: Boolean
+    updatedAt: String
+}
+
+type Chat {
+    chatId: Int
+    name: String
+    members: [Int]
+    createdBy: User
+    deletedBy: [Int]
+    lastMessage: String
+    tags: [String]
+    createdAt: String
+    updatedAt: String
+}
+
+
+type Message {
+    messageId: Int
+    chatId: Chat
+    content: String
+    createdBy: User
+    readBy: [Int]
+    deletedBy: [Int]
+    createdAt: String
+    updatedAt: String
+}
+
+type Skill {
+    skillId: Int
+    profileId: UserProfile
+    skillName: String
+    proficiencyLevel: String
+    updatedAt: String
+}
+
+type Education {
+    educationId: Int
+    profileId: UserProfile
+    institutionName: String
+    degree: String
+    startDate: String
+    endDate: String
+    updatedAt: String
+}
+
+type Experience {
+    experienceId: Int
+    profileId: UserProfile
+    companyName: String
+    role: String
+    startDate: String
+    endDate: String
+    updatedAt: String
+}
+
+type Query {
+    ### Company ###
+    allCompanies: [Company]
+    companyById(companyId: ID!): Company
+
+    ### User ###
+    userById(userId: Int!): User
+    allUsers(limit: Int, offset: Int): [User]
+
+    ### Job ###
+    jobById(jobId: Int!): Job
+    allJobs(limit: Int, offset: Int): [Job]
+
+    ### Application ###
+    applicationById(applicationId: Int!): Application
+    allApplications(limit: Int, offset: Int): [Application]
+
+    ### UserProfile ###
+    userProfileById(profileId: Int!): UserProfile
+    allUserProfiles(limit: Int, offset: Int): [UserProfile]
+
+    ### UserSettings ###
+    userSettingsById(settingsId: Int!): UserSettings
+    allUserSettings(limit: Int, offset: Int): [UserSettings]
+
+    ### Chat ###
+    chatById(chatId: Int!): Chat
+    allChats(limit: Int, offset: Int): [Chat]
+
+    ### Message ###
+    messageById(messageId: Int!): Message
+    allMessages(chatId: Int!, limit: Int, offset: Int): [Message]
+
+    ### Skill ###
+    skillById(skillId: Int!): Skill
+    allSkills(profileId: Int!, limit: Int, offset: Int): [Skill]
+
+    ### Education ###
+    educationById(educationId: Int!): Education
+    allEducations(profileId: Int!, limit: Int, offset: Int): [Education]
+
+    ### Experience ###
+    experienceById(experienceId: Int!): Experience
+    allExperiences(profileId: Int!, limit: Int, offset: Int): [Experience]
+
+}
+
+
+type Mutation {
+    ### Company ###
+    createCompany(companyName: String!, location: String!, industry: String!, description: String!): Company
+    updateCompany(companyId: ID!, companyName: String!, location: String!, industry: String! description: String!, verified: Boolean!): Company
+    deleteCompany(companyId: ID!): Boolean
+
+    ### User ###
+    createUser( email: String! firstName: String! lastName: String! passwordHash: String! phone: String role: String): User
+    updateUser( userId: Int! email: String firstName: String lastName: String phone: String role: String isBlocked: Boolean emailVerified: Boolean employeeVerified: Boolean): User
+    deleteUser(userId: Int!): Boolean
+
+
+    ### Job ###
+    createJob( companyId: Int!, jobTitle: String!, jobDescription: String!, requiredSkills: String!, requiredExperience: String!, location: String!, salary: String): Job
+    updateJob( jobId: Int!, companyId: Int, jobTitle: String, jobDescription: String, requiredSkills: String, requiredExperience: String, location: String, salary: String): Job
+    deleteJob(jobId: Int!): Boolean
+
+    ### Application ###
+    createApplication( userId: Int!, jobId: Int!,): Application
+    updateApplication( applicationId: Int!, status: String): Application
+    deleteApplication(applicationId: Int!): Boolean
+
+    ### UserProfile ###
+    createUserProfile( userId: Int!, resumePath: String!, profilePicturePath: String!): UserProfile
+    updateUserProfile( profileId: Int!, resumePath: String, profilePicturePath: String): UserProfile
+    deleteUserProfile(profileId: Int!): Boolean
+
+    ### UserSettings ###
+    createUserSettings( userId: Int!, offersNotification: Boolean!, newsletterNotification: Boolean!, recruiterMessages: Boolean!, pushNotification: Boolean!): UserSettings
+    updateUserSettings( settingsId: Int!, offersNotification: Boolean, newsletterNotification: Boolean, recruiterMessages: Boolean, pushNotification: Boolean): UserSettings
+    deleteUserSettings(settingsId: Int!): Boolean
+
+    ### Chat ###
+    createChat( name: String!, members: [Int]!, createdBy: Int!, lastMessage: String, tags: [String]): Chat
+    updateChat(chatId: Int!,name: String,members: [Int],lastMessage: String,tags: [String]): Chat
+    deleteChat(chatId: Int!): Boolean
+
+    ### Message ###
+    createMessage(chatId: Int!,content: String!,createdBy: Int!): Message
+    updateMessage(messageId: Int!,content: String): Message
+    deleteMessage(messageId: Int!): Boolean
+
+    ### Skill ###
+    createSkill(
+        profileId: Int!,
+        skillName: String!,
+        proficiencyLevel: String!): Skill
+
+    updateSkill(
+        skillId: Int!,
+        skillName: String,
+        proficiencyLevel: String): Skill
+    deleteSkill(skillId: Int!): Boolean
+
+    ### Education ###
+    createEducation(
+        profileId: Int!,
+        institutionName: String!,
+        degree: String!,
+        startDate: String!,
+        endDate: String!): Education
+
+    updateEducation(
+        educationId: Int!,
+        institutionName: String,
+        degree: String,
+        startDate: String,
+        endDate: String): Education
+    deleteEducation(educationId: Int!): Boolean
+
+    ### Experience ###
+    createExperience(
+        profileId: Int!,
+        companyName: String!,
+        role: String!,
+        startDate: String!,
+        endDate: String!
+    ): Experience
+    updateExperience(
+        experienceId: Int!,
+        companyName: String,
+        role: String,
+        startDate: String,
+        endDate: String
+    ): Experience
+    deleteExperience(experienceId: Int!): Boolean
+}
+
+
