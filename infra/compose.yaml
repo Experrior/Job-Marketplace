@@ -1,7 +1,7 @@
 services:
   job_market_db:
-    container_name: job_market_db
-    image: job_market_db
+    container_name: job_market_database
+    image: job_market_database
     ports:  
       - "5432:5432"
     environment:

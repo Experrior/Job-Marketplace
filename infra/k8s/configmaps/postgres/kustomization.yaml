@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+configMapGenerator:
+- name: postgres-master
+  namespace: dev
+  options:
+    disableNameSuffixHash: true
+  files:
+  - pg_hba.conf
+  - postgresql-master.conf
+  - db_init.sql
+
+- name: postgres-slave
+  namespace: dev
+  options:
+    disableNameSuffixHash: true
+  files:
+  - pg_hba.conf
+  - postgresql-slave.conf
+  - slave-startup.sh
+  - copy_primary_data_to_replica.sh
