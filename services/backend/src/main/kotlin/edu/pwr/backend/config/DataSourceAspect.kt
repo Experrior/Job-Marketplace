@@ -19,21 +19,21 @@ class DataSourceAspect {
     fun before(joinPoint: JoinPoint, tds: TargetDataSource) {
         val ds = tds.name
         if (DataSourceContextHolder.containDataSource(ds)) {
-            DataSourceAspect.log.info("Use dataSource: {} -> {}", tds.name, joinPoint.signature)
+//            DataSourceAspect.log.info("Use dataSource: {} -> {}", tds.name, joinPoint.signature)
             DataSourceContextHolder.switchDataSource(tds.name)
         } else {
-            DataSourceAspect.log.error(
-                "datasource [{}] doesn't exist, using default > {}",
-                tds.name,
-                joinPoint.signature
-            )
+//            DataSourceAspect.log.error(
+//                "datasource [{}] doesn't exist, using default > {}",
+//                tds.name,
+//                joinPoint.signature
+//            )
         }
     }
 
 
     @After("@annotation(tds)")
     fun restoreDataSource(point: JoinPoint, tds: TargetDataSource) {
-        DataSourceAspect.log.info("Revert datasource {} -> {}", tds.name, point.signature)
+//        DataSourceAspect.log.info("Revert datasource {} -> {}", tds.name, point.signature)
         DataSourceContextHolder.clearDataSource()
     }
 }
