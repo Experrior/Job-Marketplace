@@ -8,7 +8,7 @@ configMapGenerator:
   files:
   - pg_hba.conf
   - postgresql-master.conf
-  - db_init.sql
+  - primary_create_replication_role.sh
 
 - name: postgres-slave
   namespace: dev

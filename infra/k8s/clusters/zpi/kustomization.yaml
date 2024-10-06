@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
 - ../../namespaces
 
-commonLabels:
-  createdBy: zpi_kustomize
+# commonLabels:
+#   createdBy: zpi_kustomize

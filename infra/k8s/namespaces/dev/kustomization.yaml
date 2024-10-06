@@ -3,8 +3,9 @@ kind: Kustomization
 
 resources:
   - ../base-namespace
+  - ../../volumes
   - ../../microservices
-
+ 
 namespace: "dev"
 # namePrefix: "dev-"
 

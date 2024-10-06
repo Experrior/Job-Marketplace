@@ -5,10 +5,10 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: postgres
+    app: postgres-master
   ports:
     - protocol: TCP
-      port: 5432       # The port exposed by the service
+      port: 5432
       targetPort: 5432
   externalIPs:
   - 172.22.0.2

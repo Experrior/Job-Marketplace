@@ -14,7 +14,7 @@ spec:
 
   volumeClaimTemplates:
     - metadata:
-        name: postgres-db
+        name: postgres-db-master
       spec:
         accessModes: [ "ReadWriteOnce" ]
         storageClassName: standard
@@ -50,7 +50,7 @@ spec:
                 command:
                   - sh
                   - -c
-                  - exec pg_isready -U postgres -h $POD_IP
+                  - exec pg_isready -U postgres
               failureThreshold: 10
               initialDelaySeconds: 60
               periodSeconds: 20
@@ -82,5 +82,5 @@ spec:
               subPath: postgresql-master.conf
 
             - name: config-volume
-              mountPath: /docker-entrypoint-initdb.d/db_init.sql
-              subPath: db_init.sql
+              mountPath: /docker-entrypoint-initdb.d/primary_create_replication_role.sh
+              subPath: primary_create_replication_role.sh

@@ -6,4 +6,4 @@ resources:
   - service.yaml
 
 commonLabels:
-  app: postgres
+  app: database_replica
