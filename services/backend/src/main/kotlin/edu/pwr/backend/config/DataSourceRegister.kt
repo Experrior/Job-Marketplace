@@ -42,6 +42,7 @@ class DataSourceRegister : EnvironmentAware, ImportBeanDefinitionRegistrar {
                 .username(username).password(password)
             return factory.build()
         } catch (e: ClassNotFoundException) {
+            throw e
 //            DataSourceRegister.log.error(e.message)
         }
         return null
@@ -56,7 +57,7 @@ class DataSourceRegister : EnvironmentAware, ImportBeanDefinitionRegistrar {
         mpv.addPropertyValue("defaultTargetDataSource", defaultDataSource)
         mpv.addPropertyValue("targetDataSources", dataSources)
         registry.registerBeanDefinition("dataSource", beanDefinition)
-//        DataSourceRegister.log.info("Registered DataSource")
+        println("[DEBUG] registerBeanDefinitions")
     }
 
     companion object {

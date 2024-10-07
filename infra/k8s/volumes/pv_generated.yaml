@@ -1,0 +1,94 @@
+no_persistent_volumes = 5
+persistent_volume_size = "5Gi"
+persistent_volumes {
+  new {
+    apiVersion = "v1"
+    kind = "PersistentVolume"
+    metadata {
+      name = "pv1"
+    }
+    spec {
+      capacity {
+        storage = "5Gi"
+      }
+      accessModes = "ReadWriteOnce"
+      persistentVolumeReclaimPolicy = "Delete"
+      storageClassName = "standard"
+      hostPath {
+        path = "/home/mateusz/Desktop/ZPI/k8s_volumes/5Gi"
+      }
+    }
+  }
+  new {
+    apiVersion = "v1"
+    kind = "PersistentVolume"
+    metadata {
+      name = "pv2"
+    }
+    spec {
+      capacity {
+        storage = "5Gi"
+      }
+      accessModes = "ReadWriteOnce"
+      persistentVolumeReclaimPolicy = "Delete"
+      storageClassName = "standard"
+      hostPath {
+        path = "/home/mateusz/Desktop/ZPI/k8s_volumes/5Gi"
+      }
+    }
+  }
+  new {
+    apiVersion = "v1"
+    kind = "PersistentVolume"
+    metadata {
+      name = "pv3"
+    }
+    spec {
+      capacity {
+        storage = "5Gi"
+      }
+      accessModes = "ReadWriteOnce"
+      persistentVolumeReclaimPolicy = "Delete"
+      storageClassName = "standard"
+      hostPath {
+        path = "/home/mateusz/Desktop/ZPI/k8s_volumes/5Gi"
+      }
+    }
+  }
+  new {
+    apiVersion = "v1"
+    kind = "PersistentVolume"
+    metadata {
+      name = "pv4"
+    }
+    spec {
+      capacity {
+        storage = "5Gi"
+      }
+      accessModes = "ReadWriteOnce"
+      persistentVolumeReclaimPolicy = "Delete"
+      storageClassName = "standard"
+      hostPath {
+        path = "/home/mateusz/Desktop/ZPI/k8s_volumes/5Gi"
+      }
+    }
+  }
+  new {
+    apiVersion = "v1"
+    kind = "PersistentVolume"
+    metadata {
+      name = "pv5"
+    }
+    spec {
+      capacity {
+        storage = "5Gi"
+      }
+      accessModes = "ReadWriteOnce"
+      persistentVolumeReclaimPolicy = "Delete"
+      storageClassName = "standard"
+      hostPath {
+        path = "/home/mateusz/Desktop/ZPI/k8s_volumes/5Gi"
+      }
+    }
+  }
+}

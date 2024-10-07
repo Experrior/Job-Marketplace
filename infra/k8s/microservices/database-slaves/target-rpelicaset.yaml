@@ -1,0 +1,140 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: slave-statefulset
+  labels:
+    replicationRole: replica
+    index: '2'
+spec:
+  serviceName: postgres-slaves
+  replicas: 1
+  selector:
+    matchLabels:
+      index: '2'
+
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-db-slave
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 1Gi
+
+  template:
+    metadata:
+      labels:
+        index: '2'
+        replicationRole: replica
+
+    spec:
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: config-volume
+          configMap:
+            name: postgres-master
+            defaultMode: 0777
+
+
+      initContainers:
+        - name: setup-replica-data-directory
+          image: postgres:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PRIMARY_HOST_NAME
+              value: 172.22.0.2
+            - name: PGPASSWORD
+            - name: PGDATA
+              value: /backup
+
+
+          command:
+            - sh
+            - -c
+            - /tmp/copy_primary_data_to_replica.sh
+
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"  
+
+          volumeMounts:
+            - name: postgres-db-slave
+              mountPath: /etc/postgresql/data/
+
+            - name: config-volume
+              mountPath: /tmp/copy_primary_data_to_replica.sh
+              subPath: copy_primary_data_to_replica.sh
+
+      containers:
+
+        - name: database-slave
+          image: job_market_database:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5432
+
+          args: ["-c", "config_file=/etc/postgresql.conf", "-c", "hba_file=/etc/pg_hba.conf"]
+
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"  
+
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+
+            - name: PRIMARY_HOST_NAME
+            - name: PG_DATA
+            - name: POSTGRES_DB
+              value: JobMarketDB
+            - name: POSTGRES_USER
+              value: admin
+            - name: POSTGRES_PASSWORD
+              value: test
+
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - exec pg_isready -U postgres
+            failureThreshold: 10
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 15
+
+
+          volumeMounts:
+
+            - name: postgres-db-slave
+              mountPath: /etc/postgresql/data/
+
+            - name: config-volume
+              mountPath: /etc/pg_hba.conf
+              subPath: pg_hba.conf
+
+            - name: config-volume
+              mountPath: /etc/postgresql.conf
+              subPath: postgresql-master.conf
+
+            - name: config-volume
+              mountPath: /docker-entrypoint-initdb.d/db_init.sql
+              subPath: db_init.sql
+
+            - name: config-volume
+              mountPath: /tmp/startup.sh
+              subPath: copy_primary_data_to_replica.sh
+              

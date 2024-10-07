@@ -1,19 +1,31 @@
 package edu.pwr.backend.services
 
+import edu.pwr.backend.config.TargetDataSource
 import edu.pwr.backend.entities.Job
 import edu.pwr.backend.repositories.JobRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
+import org.springframework.core.annotation.Order
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.sql.Timestamp
 import java.time.Instant
 
+
 @Service
-class JobService(private val jobRepository: JobRepository) {
+open class JobService(private val applicationContext: ApplicationContext, private var jobRepository: JobRepository) {
+
+
+    init {
+        println("JobRepository injected: $jobRepository")
+    }
+
 
     fun getJobById(jobId: Int): Job? {
         return jobRepository.findById(jobId).orElse(null)
     }
 
+    @TargetDataSource
     fun getAllJobs(limit: Int = 10, offset: Int = 0): List<Job> {
         return jobRepository.findAll(PageRequest.of(offset, limit)).content
     }

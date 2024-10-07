@@ -1,19 +1,20 @@
 package edu.pwr.backend.config
 
 object DataSourceContextHolder {
-    private val threadLoal = ThreadLocal<String>()
+    private val threadLocal = ThreadLocal<String>()
     private val datSourceLookupKeys: MutableList<String> = ArrayList()
 
     fun switchDataSource(ds: String) {
-        threadLoal.set(ds)
+        threadLocal.set(ds)
     }
 
     fun getDataSource(): String {
-        return threadLoal.get()
+        return threadLocal.get() ?: throw IllegalStateException("No data source set.")
     }
 
+
     fun clearDataSource() {
-        threadLoal.remove()
+        threadLocal.remove()
     }
 
     fun containDataSource(ds: String): Boolean {

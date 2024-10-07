@@ -1,13 +1,11 @@
 package edu.pwr.backend.config
 
+@Retention(AnnotationRetention.RUNTIME)
 @Target(
+    AnnotationTarget.VALUE_PARAMETER,
     AnnotationTarget.FUNCTION,
     AnnotationTarget.PROPERTY_GETTER,
     AnnotationTarget.PROPERTY_SETTER,
-    AnnotationTarget.CLASS
+    AnnotationTarget.FIELD
 )
-@Retention(
-    AnnotationRetention.RUNTIME
-)
-@MustBeDocumented
-annotation class TargetDataSource(val name: String = "")
+annotation class TargetDataSource

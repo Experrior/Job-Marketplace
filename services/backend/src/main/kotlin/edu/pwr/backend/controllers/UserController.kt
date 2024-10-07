@@ -28,7 +28,6 @@ class UserController(private val userService: UserService) {
         @Argument passwordHash: String,
         @Argument phone: String? = null,
         @Argument role: String? = null,
-
     ): User {
         return userService.createUser(email, firstName, lastName, phone, role, passwordHash)
     }

@@ -1,5 +1,6 @@
 package edu.pwr.backend.services
 
+import edu.pwr.backend.config.TargetDataSource
 import edu.pwr.backend.entities.User
 import edu.pwr.backend.repositories.UserRepository
 import org.springframework.data.domain.PageRequest
@@ -8,15 +9,18 @@ import java.sql.Timestamp
 import java.time.Instant
 
 @Service
-class UserService(private val userRepository: UserRepository) {
+open class UserService(private val userRepository: UserRepository) {
 
-    fun getUserById(userId: Int): User? {
+    @TargetDataSource
+    public fun getUserById(userId: Int): User? {
         return userRepository.findById(userId).orElse(null)
     }
 
-    fun getAllUsers(limit: Int = 10, offset: Int = 0): List<User> {
+    @TargetDataSource
+     public fun getAllUsers(limit: Int = 10, offset: Int = 0): List<User> {
         return userRepository.findAll(PageRequest.of(offset / limit, limit)).content
     }
+
 
     fun createUser(email: String, firstName: String, lastName: String, phone: String?, role: String?, passwordHash: String): User {
         val user = User(
@@ -56,7 +60,7 @@ class UserService(private val userRepository: UserRepository) {
         existingUser.createdAt = Timestamp.from(Instant.now()) // Optionally update the timestamp
         return userRepository.save(existingUser)
     }
-
+x
     fun deleteUser(userId: Int): Boolean {
         return if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId)
