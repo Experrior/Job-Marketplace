@@ -28,12 +28,21 @@ services:
       timeout: 5s
       retries: 3
     depends_on:
-      job_market_db:
-        condition: service_healthy
+      job_market_db_fill:
+        condition: service_completed_successfully
     environment:
       DATASOURCE_URL: jdbc:postgresql://172.22.0.1:5432/JobMarketDB
       DATASOURCE_USERNAME: admin
       DATASOURCE_PASSWORD: test
+    networks:
+      - inner_network
+
+  job_market_db_fill:
+    container_name: job_market_db_fill
+    image: job_market_db_fill 
+    depends_on:
+      job_market_db:
+        condition: service_healthy
     networks:
       - inner_network
 

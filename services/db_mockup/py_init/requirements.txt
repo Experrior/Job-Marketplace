@@ -1,0 +1,5 @@
+requests
+tqdm
+sqlalchemy
+psycopg
+db_mockdata==0.1.7
